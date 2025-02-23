@@ -1,6 +1,7 @@
 "use client";
 
 import { Prisma } from "@prisma/client";
+import { ScrollArea } from "@radix-ui/react-scroll-area";
 import { ChefHatIcon, ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
@@ -37,7 +38,7 @@ const ProductDetails = ({ product } : ProductDetailsProps) => {
     }
 
     return ( 
-        <div className="relative z-50 mt-[-1.5rem] rounded-t-3xl p-5 flex-auto flex flex-col">
+        <div className="relative z-50 mt-[-1.5rem] rounded-t-3xl p-5 flex-auto flex flex-col overflow-hidden">
            <div className="flex-auto">
                 {/* RESTAURANTE */}
                 <div className="flex items-center gap-1.5">
@@ -57,7 +58,7 @@ const ProductDetails = ({ product } : ProductDetailsProps) => {
                 <h2 className="mt-1 text-xl font-semibold">{product.name}</h2>
 
                 {/* PREÇO E QUANTIDADE */}
-                <div className="flex item-center justify-between">
+                <div className="flex item-center justify-between mt-3">
                     <h3 className="text-xl font-semibold">
                         {formatCurrency(product.price)}
                     </h3>
@@ -80,22 +81,28 @@ const ProductDetails = ({ product } : ProductDetailsProps) => {
                     </div>
                 </div>
 
-                {/* SOBRE */}
-                <div className="mt-6 space-y-3">
-                    <h4 className="font-semibold">Sobre</h4>
-                    <p className="text-sm text-muted-foreground">{product.description}</p>
-                </div>
-
-                {/* INGREDIENTES */}
-                <div className="mt-6 space-y-3">
-                    <div className="flex items-center gap-1">
-                        <ChefHatIcon size={18}/>
-                        <h4 className="font-semibold">Ingredientes</h4>
+                <ScrollArea className="h-full">
+                    {/* SOBRE */}
+                    <div className="mt-6 space-y-3">
+                        <h4 className="font-semibold">Sobre</h4>
+                        <p className="text-sm text-muted-foreground">{product.description}</p>
                     </div>
-                    <p className="text-sm text-muted-foreground">{product.description}</p>
-                </div>
 
-                <Button className="rounded-full w-full mt-6">Adicionar à sacola</Button>
+                    {/* INGREDIENTES */}
+                    <div className="mt-6 space-y-3">
+                        <div className="flex items-center gap-1">
+                            <ChefHatIcon size={18}/>
+                            <h4 className="font-semibold">Ingredientes</h4>
+                        </div>
+                       <ul className="list-disc px-5 text-sm text-muted-foreground">
+                            {product.ingredients.map((ingredient) => (
+                                <li key={ingredient}>{ingredient}</li>
+                            ))}
+                       </ul>
+                    </div>
+                </ScrollArea>
+
+                <Button className="rounded-full w-full">Adicionar à sacola</Button>
             </div>
         </div>
     );
