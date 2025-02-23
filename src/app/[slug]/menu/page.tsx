@@ -10,7 +10,7 @@ interface RestaurantMenuPageProps {
   searchParams: Promise<{ consumptionMethod: string }>;
 }
 
-const isConsuptionMethodValid = (consumptionMethod: string) => {
+const isConsumptionMethodValid = (consumptionMethod: string) => {
   return ["DINE_IN", "TAKEAWAY"].includes(consumptionMethod.toUpperCase());
 };
 
@@ -20,24 +20,20 @@ const RestaurantMenuPage = async ({
 }: RestaurantMenuPageProps) => {
   const { slug } = await params;
   const { consumptionMethod } = await searchParams;
-
-  if (!isConsuptionMethodValid(consumptionMethod)) {
+  if (!isConsumptionMethodValid(consumptionMethod)) {
     return notFound();
   }
-
   const restaurant = await db.restaurant.findUnique({
     where: { slug },
     include: {
       menuCategories: {
-        include: {products: true}
-      } 
+        include: { products: true },
+      },
     },
   });
-
   if (!restaurant) {
     return notFound();
   }
-
   return (
     <div>
       <RestaurantHeader restaurant={restaurant} />
@@ -46,5 +42,6 @@ const RestaurantMenuPage = async ({
   );
 };
 
-//  http://localhost:3000/fsw-donalds/menu?consumptionMethod=DINE_IN
 export default RestaurantMenuPage;
+
+// http://localhost:3000/fsw-donalds/menu?consumptionMethod=dine_in
