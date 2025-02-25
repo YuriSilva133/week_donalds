@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button";
 import { formatCurrency } from "@/helpers/format-currency";
 
 import { CartContext, CartProduct } from "../contexts/cart";
-
 interface CartItemProps {
     product: CartProduct;
 }
@@ -52,7 +51,6 @@ const CartProductItem  = ({ product } : CartItemProps ) => {
                 variant="outline"
                 onClick={() => removeProduct(product.id)}
             >
-
                 <TrashIcon/>
             </Button> 
         </div>
