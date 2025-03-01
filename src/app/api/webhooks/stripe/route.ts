@@ -23,8 +23,7 @@ export async function POST(request: Request) {
   const text = await request.text();
   const event = stripe.webhooks.constructEvent(text, signature, webhookSecret);
 
-  switch (event.type) {
-	case 'checkout.session.completed': {
+  	if (event.type === "checkout.session.completed"){
 		const orderId = event.data.object.metadata?.orderId;
 		if (!orderId) {
 		return NextResponse.json({
@@ -48,9 +47,7 @@ export async function POST(request: Request) {
 		}
 		});
 		revalidatePath(`/${order.restaurant.slug}/menu`)
-		break;
-	}
-	case 'charge.failed': {
+	} else if (event.type === 'charge.failed'){
 		const orderId = event.data.object.metadata?.orderId;
 		if (!orderId) {
 		return NextResponse.json({
@@ -74,11 +71,9 @@ export async function POST(request: Request) {
 		}
 		});
 		revalidatePath(`/${order.restaurant.slug}/menu`)
-		break;
 	}
-  }
-
-  return NextResponse.json({
-    received: true,
-  });
+  
+	return NextResponse.json({
+		received: true,
+	});
 }
